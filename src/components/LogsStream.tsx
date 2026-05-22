@@ -1,18 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { Activity, Play, Pause, AlertCircle } from 'lucide-react';
+import { LogItem, RunStats } from '@/types';
 
-export interface LogItem {
-  id: string;
-  timestamp: string;
-  type: 'info' | 'redact' | 'warn' | 'danger';
-  message: string;
-  details: string;
-}
-
-interface LogsStreamProps {
+export interface LogsStreamProps {
   logs: LogItem[];
-  onAddSimulatedLog: (logItem: LogItem, statsToIncrement: any) => void;
+  onAddSimulatedLog: (logItem: LogItem, statsToIncrement: Partial<RunStats> & { totalRedacted?: number }) => void;
 }
+
+// Re-export LogItem for backward compatibility
+export type { LogItem };
 
 const MOCK_PROMPTS_TRAFFIC = [
   {

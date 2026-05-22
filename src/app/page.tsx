@@ -8,6 +8,7 @@ import Playground from '@/components/Playground';
 import LogsStream, { LogItem } from '@/components/LogsStream';
 import AnalyticsChart from '@/components/AnalyticsChart';
 import { PiiRedactorConfig } from '@/utils/piiRedactor';
+import { RunMetrics, RunStats } from '@/types';
 
 // Seed log data — timestamps use static relative labels to avoid hydration mismatch.
 // Live logs generated in useEffect/event handlers use real-time client timestamps.
@@ -68,24 +69,6 @@ export default function Dashboard() {
 
   // Start with empty logs to avoid hydration mismatch, then populate on mount
   const [logs, setLogs] = useState<LogItem[]>([]);
-
-  // Types for run metrics and stats used by callbacks
-  type RunMetrics = {
-    latencyMs: number;
-    rawTokens?: number;
-    redactedTokens?: number;
-    tokenSavingsPercent?: number;
-    complianceSavingsDollars: number;
-  };
-
-  type RunStats = {
-    emailsCount: number;
-    phonesCount: number;
-    creditCardsCount: number;
-    ipsCount: number;
-    namesCount: number;
-    totalRedacted: number;
-  };
 
   // Sync theme attribute to HTML tag and populate seed logs (client-side only).
   // Defer state updates to the next macrotask to avoid synchronous setState warnings

@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { Terminal, Send, ArrowRight, Key, Sparkles, RefreshCw } from 'lucide-react';
 import { PiiRedactorConfig } from '@/utils/piiRedactor';
+import { ProxyResponse, RunMetrics, RunStats, LogItem } from '@/types';
 
 interface PlaygroundProps {
   config: PiiRedactorConfig;
-  onRunCompleted: (metrics: any, stats: any, logItem: any) => void;
+  onRunCompleted: (metrics: RunMetrics, stats: RunStats, logItem: LogItem) => void;
 }
 
 const SAMPLE_TEXTS = [
@@ -16,7 +17,7 @@ const SAMPLE_TEXTS = [
 export default function Playground({ config, onRunCompleted }: PlaygroundProps) {
   const [inputText, setInputText] = useState(SAMPLE_TEXTS[0]);
   const [isLoading, setIsLoading] = useState(false);
-  const [result, setResult] = useState<any>(null);
+  const [result, setResult] = useState<ProxyResponse | null>(null);
 
   const handleInsertSample = () => {
     const randomIndex = Math.floor(Math.random() * SAMPLE_TEXTS.length);
@@ -38,11 +39,11 @@ export default function Playground({ config, onRunCompleted }: PlaygroundProps) 
         throw new Error('API request failed');
       }
 
-      const data = await response.json();
+      const data: ProxyResponse = await response.json();
       setResult(data);
 
       // Construct a log item to send to the parent dashboard logs
-      const logItem = {
+      const logItem: LogItem = {
         id: Math.random().toString(36).substr(2, 9),
         timestamp: new Date().toLocaleTimeString(),
         type: data.stats.totalRedacted > 0 ? 'redact' : 'info',
@@ -131,7 +132,7 @@ export default function Playground({ config, onRunCompleted }: PlaygroundProps) 
                       </tr>
                     </thead>
                     <tbody>
-                      {Object.entries(result.vault).map(([token, val]: [string, any]) => (
+                      {Object.entries(result.vault).map(([token, val]: [string, string]) => (
                         <tr key={token}>
                           <td className="vault-token">{token}</td>
                           <td className="vault-value" style={{ wordBreak: 'break-all' }}>{val.substring(0, 16)}...</td>

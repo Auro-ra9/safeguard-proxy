@@ -40,7 +40,7 @@ A developer-focused reverse-proxy gateway that automatically detects, masks, and
 
 ### Prerequisites
 
-- **Node.js** 18+ and **npm** 9+
+- **Node.js** 20+ and **npm** 9+
 - (Optional) **Docker** for containerised deployment
 
 ### Installation
